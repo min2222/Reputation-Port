@@ -1,14 +1,21 @@
 package mods.thecomputerizer.reputation.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.OptionalLong;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import mods.thecomputerizer.reputation.Reputation;
+
 import mods.thecomputerizer.reputation.Constants;
+import mods.thecomputerizer.reputation.Reputation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.*;
 
 public class JsonUtil {
 
@@ -16,7 +23,7 @@ public class JsonUtil {
         if(Objects.isNull(json) || !json.has(element)) return Optional.empty();
         try {
             ResourceLocation resource = new ResourceLocation(json.get(element).getAsString());
-            return ForgeRegistries.ENTITIES.containsKey(resource) ? Optional.ofNullable(ForgeRegistries.ENTITIES.getValue(resource)) : Optional.empty();
+            return ForgeRegistries.ENTITY_TYPES.containsKey(resource) ? Optional.ofNullable(ForgeRegistries.ENTITY_TYPES.getValue(resource)) : Optional.empty();
         } catch (Exception e) {
             Reputation.logError("Could not read json element {}",element,e);
             return Optional.empty();

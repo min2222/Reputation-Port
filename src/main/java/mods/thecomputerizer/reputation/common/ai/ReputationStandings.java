@@ -49,14 +49,14 @@ public class ReputationStandings {
             for (JsonElement index : json.get(element).getAsJsonArray()) {
                 String[] name = index.getAsString().split(":");
                 EntityType<?> entity = null;
-                if(name.length==1) entity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(name[0]));
-                else if(name.length==2) entity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(name[0], name[1]));
+                if(name.length==1) entity = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name[0]));
+                else if(name.length==2) entity = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name[0], name[1]));
                 else if(name.length==3) {
                     if(checkValidStanding(name[2])) defaultStanding = name[2];
-                    entity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(name[0],name[1]));
+                    entity = ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name[0],name[1]));
                 }
                 if(Objects.nonNull(entity)) {
-                    Reputation.logInfo("Adding attribute to entity {} with custom standing {}",entity.getRegistryName(),defaultStanding);
+                    Reputation.logInfo("Adding attribute to entity {} with custom standing {}",ForgeRegistries.ENTITY_TYPES.getKey(entity),defaultStanding);
                     members.add(entity);
                     map.put(entity,defaultStanding);
                 } else Reputation.logError("Could not read standings map for element {}",element);

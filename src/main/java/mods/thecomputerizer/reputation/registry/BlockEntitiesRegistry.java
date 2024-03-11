@@ -9,10 +9,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@SuppressWarnings("ConstantConditions")
 public class BlockEntitiesRegistry {
     public static DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTRY =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MODID);
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
     public static RegistryObject<BlockEntityType<LedgerEntity>> LEDGER_ENTITY = BLOCK_ENTITY_REGISTRY.register(
             "ledger_entity", () -> BlockEntityType.Builder.of(LedgerEntity::new,BlockRegistry.LEDGER.get())
                     .build(null));

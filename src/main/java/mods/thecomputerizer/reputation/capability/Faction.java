@@ -1,8 +1,15 @@
 package mods.thecomputerizer.reputation.capability;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.*;
 
 public class Faction {
 
@@ -144,7 +149,7 @@ public class Faction {
 		List<EntityType<?>> members = new ArrayList<>();
 		if(json.has("members")) {
 			for (ResourceLocation loc : parseResourceArray("members", json)) {
-				EntityType<?> entity = ForgeRegistries.ENTITIES.getValue(loc);
+				EntityType<?> entity = ForgeRegistries.ENTITY_TYPES.getValue(loc);
 				members.add(entity);
 			}
 		}
@@ -168,13 +173,13 @@ public class Faction {
 		builder.append("\"default_reputation\": ").append(this.defaultRep).append(", ").append("\n");
 		builder.append("\"lower_reputation_bound\": ").append(this.lowerRep).append(", ").append("\n");
 		builder.append("\"upper_reputation_bound\": ").append(this.higherRep).append(", ").append("\n");
-		builder.append("\"currency\": \"").append(Objects.requireNonNull(this.currencyItem.getRegistryName())).append("\", ").append("\n");
+		builder.append("\"currency\": \"").append(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.currencyItem))).append("\", ").append("\n");
 		builder.append("\"weighted_murder\": ").append(this.weightedActions.get("murder")).append(", ").append("\n");
 		builder.append("\"weighted_looting\": ").append(this.weightedActions.get("looting")).append(", ").append("\n");
 		builder.append("\"weighted_fleeing\": ").append(this.weightedActions.get("fleeing")).append(", ").append("\n");
 		builder.append("\"members\": [").append("\n");
 		for (int i = 0; i < this.members.size(); i++) {
-			builder.append("\"").append(Objects.requireNonNull(this.members.get(i).getRegistryName())).append("\"");
+			builder.append("\"").append(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(this.members.get(i)))).append("\"");
 			if (i < this.members.size()-1) builder.append(", ").append("\n");
 		}
 		builder.append("], \n");

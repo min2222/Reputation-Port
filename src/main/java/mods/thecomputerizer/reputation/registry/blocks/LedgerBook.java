@@ -1,5 +1,11 @@
 package mods.thecomputerizer.reputation.registry.blocks;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
@@ -8,11 +14,10 @@ import mods.thecomputerizer.reputation.registry.SoundRegistry;
 import mods.thecomputerizer.reputation.registry.blockentities.LedgerBookEntity;
 import mods.thecomputerizer.reputation.registry.items.FactionCurrencyBag;
 import mods.thecomputerizer.reputation.util.HelperMethods;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -24,7 +29,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -34,10 +44,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
-import java.util.Objects;
 
 
 @SuppressWarnings("deprecation")
@@ -67,12 +73,12 @@ public class LedgerBook extends BaseEntityBlock {
                         if(Objects.nonNull(faction) && !tag.contains("signed")) {
                             float factor = 2f;
                             if(HelperMethods.getNearEntitiesOfFaction(sLevel,player,faction,8).isEmpty()) {
-                                player.sendMessage(new TranslatableComponent("ledger_book.reputation.acknowledgement"),Util.NIL_UUID);
+                                player.sendSystemMessage(Component.translatable("ledger_book.reputation.acknowledgement"));
                                 factor = 1f;
                                 level.playLocalSound(pos.getX(),pos.getY(),pos.getZ(),SoundRegistry.LEDGER_SIGN.get(),
                                         SoundSource.BLOCKS,1f,Constants.floatRand(0.88f, 1.12f),false);
                             } else {
-                                player.sendMessage(new TranslatableComponent("ledger_book.reputation.acknowledgement.extra"),Util.NIL_UUID);
+                                player.sendSystemMessage(Component.translatable("ledger_book.reputation.acknowledgement.extra"));
                                 if(!tag.contains("Enchantments")) {
                                     tag.put("Enchantments", new ListTag());
                                     CompoundTag enchTag = new CompoundTag();
@@ -93,8 +99,8 @@ public class LedgerBook extends BaseEntityBlock {
                         if(Objects.isNull(faction))
                             faction = ReputationHandler.getFactionFromCurrency(offItem.getItem());
                         if(Objects.nonNull(faction)) {
-                            player.sendMessage(new TranslatableComponent("ledger_book.reputation.numbers",
-                                    faction.getName(),ReputationHandler.getReputation(player,faction)),Util.NIL_UUID);
+                            player.sendSystemMessage(Component.translatable("ledger_book.reputation.numbers",
+                                    faction.getName(),ReputationHandler.getReputation(player,faction)));
                             ledgerBookEntity.setCooldown();
                         }
                     }

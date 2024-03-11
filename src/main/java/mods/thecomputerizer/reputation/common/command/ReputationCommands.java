@@ -1,9 +1,12 @@
 package mods.thecomputerizer.reputation.common.command;
 
+import java.util.Objects;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.PlayerFactionHandler;
@@ -13,12 +16,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.Objects;
 
 public class ReputationCommands {
 
@@ -110,10 +111,10 @@ public class ReputationCommands {
     }
 
     private static void sendSuccess(Player player, String lang, Object ... parameters) {
-        player.sendMessage(new TranslatableComponent("commands."+Constants.MODID+"."+lang,parameters),player.getUUID());
+        player.sendSystemMessage(Component.translatable("commands."+Constants.MODID+"."+lang,parameters));
     }
 
     private static void throwException(String lang, Object ... parameters) {
-        throw new CommandRuntimeException(new TranslatableComponent("commands."+Constants.MODID+"."+lang,parameters));
+        throw new CommandRuntimeException(Component.translatable("commands."+Constants.MODID+"."+lang,parameters));
     }
 }

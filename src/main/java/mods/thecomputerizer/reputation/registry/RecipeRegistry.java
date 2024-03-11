@@ -1,9 +1,18 @@
 package mods.thecomputerizer.reputation.registry;
 
+import static mods.thecomputerizer.reputation.registry.ItemRegistry.FACTION_BAG;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.jetbrains.annotations.NotNull;
+
+import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.Reputation;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
-import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.util.HelperMethods;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -17,13 +26,8 @@ import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static mods.thecomputerizer.reputation.registry.ItemRegistry.FACTION_BAG;
 
 public class RecipeRegistry {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_REGISTRY =
@@ -35,7 +39,7 @@ public class RecipeRegistry {
     public static void updateCurrencySet(Set<Item> items) {
         CURRENCY_SET = items;
         Reputation.logStringCollection("Adding items to the currency set",
-                CURRENCY_SET.stream().map((item) -> Optional.ofNullable(item.getRegistryName())
+                CURRENCY_SET.stream().map((item) -> Optional.ofNullable(ForgeRegistries.ITEMS.getKey(item))
                                 .map(ResourceLocation::toString).orElse(null)).filter(Objects::nonNull)
                         .collect(Collectors.toSet()),10);
     }
@@ -44,7 +48,6 @@ public class RecipeRegistry {
         RECIPE_REGISTRY.register(bus);
     }
 
-    @SuppressWarnings("SameParameterValue")
     private static RegistryObject<RecipeSerializer<?>> register(String name) {
         return RECIPE_REGISTRY.register(name,() -> new SimpleRecipeSerializer<>(DoughnutRecipe::new));
     }

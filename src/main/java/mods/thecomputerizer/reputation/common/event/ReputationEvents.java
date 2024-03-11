@@ -1,5 +1,9 @@
 package mods.thecomputerizer.reputation.common.event;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ContainerHandler;
@@ -26,15 +30,11 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @EventBusSubscriber(modid = Constants.MODID)
 public class ReputationEvents {
@@ -57,15 +57,15 @@ public class ReputationEvents {
 
 	@SubscribeEvent
 	public static void useBlock(PlayerInteractEvent.RightClickBlock event) {
-		if(event.getWorld() instanceof ServerLevel level && event.getUseBlock()!=Event.Result.DENY) {
+		if(event.getLevel() instanceof ServerLevel level && event.getUseBlock()!=Event.Result.DENY) {
 			BlockEntity entity = level.getBlockEntity(event.getPos());
 			if(entity instanceof Container &&
 					entity.getCapability(PlacedContainerProvider.PLACED_CONTAINER_CAPABILITY).isPresent() &&
 					ContainerHandler.changesReputation(entity)) {
-				for(LivingEntity living : HelperMethods.getSeenEntitiesOfTypeInRange(level,event.getPlayer(),EntityType.VILLAGER,event.getPos(),16f)) {
+				for(LivingEntity living : HelperMethods.getSeenEntitiesOfTypeInRange(level,event.getEntity(),EntityType.VILLAGER,event.getPos(),16f)) {
 					Villager villager = (Villager)living;
 					for(Faction faction : ReputationHandler.getEntityFactions(villager))
-						ReputationHandler.changeReputation(event.getPlayer(), faction, -1*faction.getActionWeighting("looting"));
+						ReputationHandler.changeReputation(event.getEntity(), faction, -1*faction.getActionWeighting("looting"));
 				}
 			}
 		}
@@ -73,7 +73,7 @@ public class ReputationEvents {
 
 	@SubscribeEvent
 	public static void placeBlock(BlockEvent.EntityPlaceEvent event) {
-		LevelAccessor level = event.getWorld();
+		LevelAccessor level = event.getLevel();
 		if(event.getEntity() instanceof Player) {
 			BlockEntity entity = level.getBlockEntity(event.getPos());
 			if(entity instanceof LidBlockEntity || entity instanceof BarrelBlockEntity)
@@ -84,7 +84,7 @@ public class ReputationEvents {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void setTarget(LivingChangeTargetEvent event) {
 		if(!event.isCanceled()) {
-			LivingEntity entity = event.getEntityLiving();
+			LivingEntity entity = event.getEntity();
 			synchronized (WorldEvents.TRACKER_MAP) {
 				if(WorldEvents.TRACKER_MAP.containsKey(entity)) {
 					ChatTracker tracker = WorldEvents.TRACKER_MAP.get(entity);
@@ -100,7 +100,7 @@ public class ReputationEvents {
 
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		if(entity.level instanceof ServerLevel level) {
 			TICK_THESE.remove(entity);
 			DamageSource source = event.getSource();

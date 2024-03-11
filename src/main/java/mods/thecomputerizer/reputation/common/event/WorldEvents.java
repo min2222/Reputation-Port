@@ -1,17 +1,29 @@
 package mods.thecomputerizer.reputation.common.event;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.PlayerFactionHandler;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
+import mods.thecomputerizer.reputation.capability.playerfaction.PlayerFactionProvider;
 import mods.thecomputerizer.reputation.capability.reputation.IReputation;
-import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.reputation.ReputationProvider;
 import mods.thecomputerizer.reputation.common.ai.ChatTracker;
 import mods.thecomputerizer.reputation.common.ai.ReputationAIPackages;
 import mods.thecomputerizer.reputation.common.ai.ReputationStandings;
 import mods.thecomputerizer.reputation.common.ai.ServerTrackers;
-import mods.thecomputerizer.reputation.common.ai.goals.*;
-import mods.thecomputerizer.reputation.capability.playerfaction.PlayerFactionProvider;
+import mods.thecomputerizer.reputation.common.ai.goals.FleeBattleGoal;
+import mods.thecomputerizer.reputation.common.ai.goals.FleeBattleTargetOverride;
+import mods.thecomputerizer.reputation.common.ai.goals.FleeGoal;
+import mods.thecomputerizer.reputation.common.ai.goals.ReputationAttackableTargetGoal;
+import mods.thecomputerizer.reputation.common.ai.goals.ReputationPacifyHostileCustomStandingGoal;
 import mods.thecomputerizer.reputation.common.command.ReputationCommands;
 import mods.thecomputerizer.reputation.network.PacketChatIcon;
 import mods.thecomputerizer.reputation.network.PacketSyncFactions;
@@ -32,14 +44,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("rawtypes")
 @Mod.EventBusSubscriber(modid = Constants.MODID)
@@ -73,8 +82,8 @@ public class WorldEvents {
      * Handles AI tweaks for entities that spawn for both entities that use brains and those that do not.
      */
     @SubscribeEvent
-    public static void onJoin(EntityJoinWorldEvent event) {
-        if(event.getEntity() instanceof LivingEntity entity && !event.getWorld().isClientSide) {
+    public static void onJoin(EntityJoinLevelEvent event) {
+        if(event.getEntity() instanceof LivingEntity entity && !event.getLevel().isClientSide) {
             Brain<? extends LivingEntity> brain = entity.getBrain();
             //only need to add sensors to mobs that actually use brains, otherwise goals are necessary
             if(!brain.memories.isEmpty()) {
@@ -156,7 +165,7 @@ public class WorldEvents {
     @SubscribeEvent
     public static void onRespawn(PlayerEvent.Clone event) {
         Player original = event.getOriginal();
-        Player respawned = event.getPlayer();
+        Player respawned = event.getEntity();
         if(original instanceof ServerPlayer sOriginal && respawned instanceof ServerPlayer sRespawned) {
             PLAYERS.remove(sOriginal);
             PLAYERS.add(sRespawned);
@@ -176,7 +185,7 @@ public class WorldEvents {
      */
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent e) {
-        if(e.getPlayer() instanceof ServerPlayer player)
+        if(e.getEntity() instanceof ServerPlayer player)
             PLAYERS.remove(player);
     }
 

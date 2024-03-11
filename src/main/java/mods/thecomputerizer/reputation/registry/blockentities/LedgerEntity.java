@@ -1,5 +1,10 @@
 package mods.thecomputerizer.reputation.registry.blockentities;
 
+import java.util.Objects;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
@@ -10,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -26,10 +30,6 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public class LedgerEntity extends BaseContainerBlockEntity implements LidBlockEntity {
 
@@ -66,7 +66,7 @@ public class LedgerEntity extends BaseContainerBlockEntity implements LidBlockEn
     private void tick(Level level, BlockPos pos) {
         if(this.cooldownTimer>0) {
             this.cooldownTimer--;
-            this.setCustomName(new TranslatableComponent("ledger.reputation.checked"));
+            this.setCustomName(Component.translatable("ledger.reputation.checked"));
         } else {
             long time = level.dayTime();
             if(time>=12000 && time<=13000) runCollection(level, pos);
@@ -90,13 +90,13 @@ public class LedgerEntity extends BaseContainerBlockEntity implements LidBlockEn
         level.playLocalSound(pos.getX(),pos.getY(),pos.getZ(),SoundRegistry.LEDGER_PLACE.get(),SoundSource.BLOCKS,
                 1f,Constants.floatRand(0.88f,1.12f),false);
         this.clearContent();
-        this.setCustomName(new TranslatableComponent("ledger.reputation.checked"));
+        this.setCustomName(Component.translatable("ledger.reputation.checked"));
         this.cooldownTimer = 2000;
     }
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return new TranslatableComponent("ledger.reputation.container");
+        return Component.translatable("ledger.reputation.container");
     }
 
     @Override

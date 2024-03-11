@@ -1,8 +1,20 @@
 package mods.thecomputerizer.reputation.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
@@ -17,13 +29,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderNameplateEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -38,7 +48,7 @@ public class ClientEvents {
     private static int TICK_COUNTER = 0;
 
     @SubscribeEvent
-    public static void onDisconnect(ClientPlayerNetworkEvent.LoggedOutEvent e) {
+    public static void onDisconnect(ClientPlayerNetworkEvent.LoggingOut e) {
         CLIENT_FACTIONS.clear();
     }
 
@@ -49,7 +59,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void renderName(RenderNameplateEvent e) {
+    public static void renderName(RenderNameTagEvent e) {
         Player player = Minecraft.getInstance().player;
         if(Objects.nonNull(player) && e.getEntity() instanceof LivingEntity living) {
             if(living.distanceTo(player)<=RENDER_DISTANCE) {

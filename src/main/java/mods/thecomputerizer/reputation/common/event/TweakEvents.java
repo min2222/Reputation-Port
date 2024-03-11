@@ -1,12 +1,14 @@
 package mods.thecomputerizer.reputation.common.event;
 
+import java.util.Objects;
+
 import mods.thecomputerizer.reputation.Constants;
 import mods.thecomputerizer.reputation.capability.Faction;
 import mods.thecomputerizer.reputation.capability.handlers.ReputationHandler;
 import mods.thecomputerizer.reputation.registry.items.FactionCurrencyBag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -21,14 +23,12 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
-import java.util.Objects;
-
 @EventBusSubscriber(modid= Constants.MODID)
 public class TweakEvents {
 
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 		Level level = entity.level;
 		if(!level.isClientSide) {
 			synchronized (WorldEvents.TRACKER_MAP) {
@@ -64,9 +64,9 @@ public class TweakEvents {
 			if(tag.contains("factionID")) {
 				Faction faction = ReputationHandler.getFaction(new ResourceLocation(tag.getString("factionID")));
 				if(Objects.nonNull(faction)) {
-					tag.putUUID("playerUUID", event.getPlayer().getUUID());
-					String itemName = new TranslatableComponent(faction.getCurrencyItem().getDescriptionId()).getString();
-					stack.setHoverName(new TranslatableComponent("item.reputation.faction_bad.faction_name",itemName));
+					tag.putUUID("playerUUID", event.getEntity().getUUID());
+					String itemName = Component.translatable(faction.getCurrencyItem().getDescriptionId()).getString();
+					stack.setHoverName(Component.translatable("item.reputation.faction_bad.faction_name",itemName));
 				}
 			}
 		}

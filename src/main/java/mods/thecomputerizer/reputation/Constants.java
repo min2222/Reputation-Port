@@ -1,11 +1,13 @@
 package mods.thecomputerizer.reputation;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import java.util.Random;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Random;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 
 public class Constants {
 
@@ -13,6 +15,7 @@ public class Constants {
 	public static final String NAME = "Reputation";
 	public static final Logger LOGGER = LogManager.getLogger(NAME);
 	private static final Random RANDOM = new Random();
+	private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
 	public static float floatRand() {
 		return RANDOM.nextFloat();
@@ -21,7 +24,7 @@ public class Constants {
 		return RANDOM.nextFloat(bound);
 	}
 	public static float floatRand(float min, float max) {
-		return Mth.randomBetween(RANDOM,min,max);
+		return Mth.randomBetween(RANDOM_SOURCE,min,max);
 	}
 	public static int intRand(int bound) {
 		return RANDOM.nextInt(bound);

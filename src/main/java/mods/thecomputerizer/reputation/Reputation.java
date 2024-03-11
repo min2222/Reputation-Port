@@ -1,5 +1,7 @@
 package mods.thecomputerizer.reputation;
 
+import java.util.Collection;
+
 import mods.thecomputerizer.reputation.capability.FactionListener;
 import mods.thecomputerizer.reputation.capability.placedcontainer.IPlacedContainer;
 import mods.thecomputerizer.reputation.capability.playerfaction.IPlayerFaction;
@@ -19,8 +21,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.util.Collection;
 
 @Mod(value = Constants.MODID)
 public class Reputation {
