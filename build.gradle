@@ -80,15 +80,15 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:${project.mixin_version}:processor")
 
     //Locally Implemented Mods
-    implementation(fg.deobf("com.feywild.quest_giver:Quest_Giver:${project.questgiver_version}"))
+    //implementation(fg.deobf("com.feywild.quest_giver:Quest_Giver:${project.questgiver_version}"))
+    //implementation(fg.deobf("com.afunproject.dawncraft:dawncraft-tweaks:${project.afptweaks_version}"))
 
     //Implemented Mods
     implementation(fg.deobf("curse.maven:guard-villagers-360203:${project.guards_version}"))
-    implementation(fg.deobf("curse.maven:morevillagers-484954:${project.morevillagers_version}"))
+    implementation(fg.deobf("curse.maven:more-villagers-484954:${project.morevillagers_version}"))
     implementation(fg.deobf("curse.maven:the-impossible-library-661115:${project.til_version}"))
 
     //Runtime Mods
-    runtimeOnly(fg.deobf("curse.maven:afptweaks-638098:${project.afptweaks_version}"))
     runtimeOnly(fg.deobf("curse.maven:atlas-lib-463826:${project.atlaslib_version}"))
     runtimeOnly(fg.deobf("curse.maven:configured-457570:${project.configured_version}"))
     runtimeOnly(fg.deobf("curse.maven:epicfigt-405076:${project.epicfight_version}"))

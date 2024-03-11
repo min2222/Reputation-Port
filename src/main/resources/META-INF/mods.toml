@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[43,)"
 license="MIT"
 
 [[mods]]
@@ -17,6 +17,6 @@ license="MIT"
     [[dependencies.reputation]]
         modId="theimpossiblelibrary"
         mandatory=true
-        versionRange="[1.18.2-0.3.1,)"
+        versionRange="[1.19.2-0.3.1,)"
         ordering="NONE"
         side="BOTH"
