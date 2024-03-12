@@ -13,7 +13,7 @@ public class CommandArgumentTypeRegistry {
 
     public static final DeferredRegister<ArgumentTypeInfo<?, ?>> TYPE_REGISTRY = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, Constants.MODID);
     
-    public static final RegistryObject<ArgumentTypeInfo<?, ?>> REPUTATION = TYPE_REGISTRY.register("reputation:faction_argument", () -> SingletonArgumentInfo.contextFree(ReputationFactionArgument::id));
+    public static final RegistryObject<ArgumentTypeInfo<?, ?>> REPUTATION = TYPE_REGISTRY.register("faction_argument", () -> SingletonArgumentInfo.contextFree(ReputationFactionArgument::id));
     
     public static void register(IEventBus bus) {
     	TYPE_REGISTRY.register(bus);
