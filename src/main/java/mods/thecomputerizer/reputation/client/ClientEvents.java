@@ -28,7 +28,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -120,7 +120,7 @@ public class ClientEvents {
      * Prints the player's reputation for each faction to the screen
      */
     @SubscribeEvent
-    public static void debugInfo(RenderGameOverlayEvent.Text e) {
+    public static void debugInfo(CustomizeGuiOverlayEvent.DebugText e) {
         if(ClientConfigHandler.debug.get() && Objects.nonNull(Minecraft.getInstance().player))
             for(Faction f : CLIENT_FACTIONS.values())
                 e.getLeft().add("Reputation for the "+f.getID()+" faction: "+CLIENT_FACTIONS_REPUTATION.get(f));

@@ -9,8 +9,9 @@ import mods.thecomputerizer.reputation.capability.reputation.IReputation;
 import mods.thecomputerizer.reputation.common.command.ReputationFactionArgument;
 import mods.thecomputerizer.reputation.config.ClientConfigHandler;
 import mods.thecomputerizer.reputation.registry.RegistryHandler;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -37,8 +38,8 @@ public class Reputation {
 	}
 
 	public void commonSetup(FMLCommonSetupEvent event) {
-		ArgumentTypes.register("reputation:faction_argument",ReputationFactionArgument.class,
-				new EmptyArgumentSerializer<>(ReputationFactionArgument::id));
+		ArgumentTypeInfos.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, "reputation:faction_argument",ReputationFactionArgument.class,
+				SingletonArgumentInfo.contextFree(ReputationFactionArgument::id));
 	}
 
 	public void registerCapabilities(RegisterCapabilitiesEvent event) {
