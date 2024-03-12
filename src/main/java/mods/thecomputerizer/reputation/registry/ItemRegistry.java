@@ -10,7 +10,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-@SuppressWarnings("unused")
 public class ItemRegistry {
     public static DeferredRegister<Item> ITEM_REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
     public static RegistryObject<Item> LEDGER_ITEM = ITEM_REGISTRY.register("ledger",

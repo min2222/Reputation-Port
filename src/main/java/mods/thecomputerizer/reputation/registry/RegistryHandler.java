@@ -28,6 +28,7 @@ public class RegistryHandler {
         RecipeRegistry.register(bus);
         BlockEntitiesRegistry.register(bus);
         SoundRegistry.register(bus);
+        CommandArgumentTypeRegistry.register(bus);
         ReputationMemoryModule.MEMORY_MODULES.register(bus);
         ReputationSenorType.SENSOR_TYPES.register(bus);
     }

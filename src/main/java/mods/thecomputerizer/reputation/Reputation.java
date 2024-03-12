@@ -6,12 +6,8 @@ import mods.thecomputerizer.reputation.capability.FactionListener;
 import mods.thecomputerizer.reputation.capability.placedcontainer.IPlacedContainer;
 import mods.thecomputerizer.reputation.capability.playerfaction.IPlayerFaction;
 import mods.thecomputerizer.reputation.capability.reputation.IReputation;
-import mods.thecomputerizer.reputation.common.command.ReputationFactionArgument;
 import mods.thecomputerizer.reputation.config.ClientConfigHandler;
 import mods.thecomputerizer.reputation.registry.RegistryHandler;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.core.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -20,7 +16,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(value = Constants.MODID)
@@ -28,18 +23,12 @@ public class Reputation {
 
 	public Reputation() {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		bus.addListener(this::commonSetup);
 		bus.addListener(this::registerCapabilities);
 		MinecraftForge.EVENT_BUS.addListener(this::reloadData);
 		RegistryHandler.initRegistries(bus);
 		RegistryHandler.queuePackets();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT,
 				ClientConfigHandler.CONFIG,"reputation/client.toml");
-	}
-
-	public void commonSetup(FMLCommonSetupEvent event) {
-		ArgumentTypeInfos.register(Registry.COMMAND_ARGUMENT_TYPE_REGISTRY, "reputation:faction_argument",ReputationFactionArgument.class,
-				SingletonArgumentInfo.contextFree(ReputationFactionArgument::id));
 	}
 
 	public void registerCapabilities(RegisterCapabilitiesEvent event) {
